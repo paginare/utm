@@ -27,10 +27,10 @@ function getUTMParameters() {
   return utmParameters;
 }
 
-// Concatena os parâmetros UTM nos links
+// Concatena os parâmetros UTM nos links com a classe "btn"
 function concatenateUTMToLinks() {
   var utmParameters = getUTMParameters();
-  var links = document.getElementsByTagName("a");
+  var links = document.querySelectorAll("a.btn");
 
   for (var i = 0; i < links.length; i++) {
     var link = links[i];
@@ -65,13 +65,18 @@ function concatenateUTMToLinks() {
       }
 
       if (utmString) {
-        link.setAttribute("href", linkHref + utmString);
+        if (linkHref.includes("#")) {
+          // Trata o link âncora separadamente
+          var parts = linkHref.split("#");
+          var newHref = parts[0] + utmString + "#" + parts[1];
+          link.setAttribute("href", newHref);
+        } else {
+          link.setAttribute("href", linkHref + utmString);
+        }
       }
     }
   }
 }
 
-// Chama a função para concatenar os parâmetros UTM nos links quando a 
-página for carregada
+// Chama a função para concatenar os parâmetros UTM nos links quando a página for carregada
 window.addEventListener("load", concatenateUTMToLinks);
-
